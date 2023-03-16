@@ -1,4 +1,5 @@
 import Product from "../models/productModel.js";
+import ApiFeatures from "../utils/apifeatures.js";
 
 // Create Product --Admin
 export const createProduct = async (req, res, next) => {
@@ -39,11 +40,20 @@ export const getProductDetails = async (req, res, next) => {
 
 // Get All Products
 export const getAllProducts = async (req, res, next) => {
+  const resultPerPage = 5;
+  const productsCount = await Product.countDocuments();
+
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
+
   try {
-    const products = await Product.find();
+    const products = await apiFeature.query;
     res.status(200).json({
       success: true,
       products,
+      productsCount,
     });
   } catch (err) {
     next(err);
