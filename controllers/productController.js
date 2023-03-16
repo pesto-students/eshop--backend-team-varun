@@ -60,20 +60,6 @@ export const getAllProducts = async (req, res, next) => {
   }
 };
 
-// Get All Products using filter
-// export const getHotels = async (req, res, next) => {
-//   const { min, max, ...others } = req.query;
-//   try {
-//     const hotels = await Hotel.find({
-//       ...others,
-//       cheapestPrice: { $gt: min | 1, $lt: max || 100000 },
-//     }).limit(req.query.limit);
-//     res.status(200).json(hotels);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 // Update Product --Admin
 export const updateProduct = async (req, res, next) => {
   try {
