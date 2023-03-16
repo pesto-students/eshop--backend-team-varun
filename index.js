@@ -16,7 +16,7 @@ app.use(express.json());
 // Routes
 app.use("/ecom/admin/products", productRoute);
 
-// Error Handling
+// Error Handling middleware
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
