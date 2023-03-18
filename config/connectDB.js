@@ -5,6 +5,7 @@ export const connectDB = async () => {
     .connect(process.env.MONGO_URI)
     .then((data) => {
       console.log(`MongoDB connecting successfull`);
+
     })
     .catch((error) => {
       throw error;
