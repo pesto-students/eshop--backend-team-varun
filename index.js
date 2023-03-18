@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import { connectDB } from "./config/connectDB.js";
 import productRoute from "./route/productRoute.js";
+import userRoute from "./route/userRoute.js";
 
 const app = express();
 
@@ -10,11 +12,12 @@ dotenv.config({ path: "./config/config.env" });
 
 //middlewares
 // app.use(cors());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.json());
 
 // Routes
 app.use("/ecom/admin/products", productRoute);
+app.use("/ecom/admin/user", userRoute);
 
 // Error Handling middleware
 app.use((err, req, res, next) => {

@@ -3,6 +3,7 @@ import ApiFeatures from "../utils/apifeatures.js";
 
 // Create Product --Admin
 export const createProduct = async (req, res, next) => {
+  req.body.user = req.user.id;
   const newProduct = new Product(req.body);
 
   try {
