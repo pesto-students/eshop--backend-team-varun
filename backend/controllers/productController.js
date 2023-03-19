@@ -1,6 +1,6 @@
-const Product= require("../models/productModell");
+const Product= require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
-const catchAsyncError= require("../middleware/catchAsyncErrors");
+const catchAsyncError= require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/featuresApi");
 
 
@@ -8,13 +8,12 @@ const ApiFeatures = require("../utils/featuresApi");
 //create Product -- Admin access only 
 exports.createProduct=  catchAsyncError(   async(req , res, next)=>{
 
-    
+     req.body.user = req.user.id;
      
     const product =await  Product.create(req.body);
-
     res.status(201).json({
     success:true,
-    product,
+    product
 });
 });
 
