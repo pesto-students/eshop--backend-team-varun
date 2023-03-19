@@ -1,11 +1,10 @@
-const express = require("express");
+ const express = require("express");
   const {getAllProducts, 
     createProduct,
     updateProduct ,
-    deleteProduct,
-    getProductDetail, 
-    }= require("../controllers/productControllers");
-
+    deleteProduct, 
+    getProductDetail}= require("../controllers/productController");
+const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 
    const router = express.Router();
@@ -14,16 +13,16 @@ const express = require("express");
     router.route("/products").get( getAllProducts);
 
 
-    router.route("/product/new").post( createProduct);
+    router.route("/admin/product/new").post( isAuthenticatedUser, authorizeRoles("admin"),createProduct);
 
     
     router
-    .route("/product/:id")
-    .put(updateProduct)
-    .delete(deleteProduct)
-   .get(getProductDetail);
+    .route("/admin/product/:id")
+    .put(isAuthenticatedUser, authorizeRoles("admin"),updateProduct)
+    .delete(isAuthenticatedUser, authorizeRoles("admin"),deleteProduct)
+    .get(getProductDetail);
 
-  
+    router.route("/product/:id").get(getProductDetail);
 
     
 

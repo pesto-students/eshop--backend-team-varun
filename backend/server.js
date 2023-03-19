@@ -7,14 +7,13 @@ const connectDatabase =require("./config/database");
 
 //handling Uncaught Exceptions Errors
 process.on("uncaughtException",(err)=>{
-    console.log(` Error : ${err.message}`);
-    console.log(`Shutting down the server due to Uncaught Exceptions`);
- 
-  server.close(()=>{
-    process.exit(1);
-  });
- });
+   console.log(` Error : ${err.message}`);
+   console.log(`Shutting down the server due to Uncaught Exceptions`);
 
+ server.close(()=>{
+   process.exit(1);
+ });
+});
 
 
 //config
@@ -22,7 +21,6 @@ process.on("uncaughtException",(err)=>{
 
  //connecting  to DataBase
  connectDatabase();
- 
 
  const server = app.listen(process.env.PORT,()=>{
     console.log(`Sever is working   on http: //localhost ${process.env.PORT} `);
@@ -30,18 +28,15 @@ process.on("uncaughtException",(err)=>{
 
 
 
-  // Unhandled Promise Rejections Errors
+
+ // Unhandled Promise Rejections Errors
 
 process.on("unhandledRejection",(err)=>{
-    console.log(` Error : ${err.message}`);
-    console.log(`Shutting down the server due to unhandled promise Resjections`);
- 
-  server.close(()=>{
-    process.exit(1);
-  });
+   console.log(` Error : ${err.message}`);
+   console.log(`Shutting down the server due to unhandled promise Resjections`);
+
+ server.close(()=>{
+   process.exit(1);
  });
-
-
-
- 
+});
 
