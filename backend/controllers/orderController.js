@@ -1,4 +1,4 @@
-const Orer = require("../models/orderModel");
+const Order = require("../models/orderModel");
 const Product= require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError= require("../middleware/catchAsyncError");
@@ -36,3 +36,18 @@ exports.newOrder = catchAsyncError(async(req, res, next)=>{
 
 
 });
+
+// Get Single Order Details
+
+   exports.getSingleOrder = catchAsyncError( async (req, res, next)=>{
+      const order = await Order.findById(req.params.id).populate("user","name","email");
+
+      if(!order){
+         return next( new ErrorHandler("Order not found with this ID : ", 404));
+
+      };
+      res.status(200).json({
+         success:true, 
+         order,
+      })
+   })
