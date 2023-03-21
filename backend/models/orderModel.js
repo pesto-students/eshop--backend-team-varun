@@ -94,12 +94,12 @@ const orderSchema = new mongoose.Schema({
         type:Number,
         default:0,
       },
-      oderStatus:{
+      orderStatus:{
         type:String,
         required:true,
         default:"Processing",
       },
-      deliveryAt:Date,
+      deliveredAt:Date,
       createdAt:{
         type:Date,
         default:Date.now,
