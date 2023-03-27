@@ -264,3 +264,68 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
         success:true,
      });
 });
+
+
+//  Top Deals -- 
+
+ exports.getTopDeals = catchAsyncError (async( req, res, next)=>{
+     
+     
+const products = await  Product.find()
+
+if(!products){
+    return next(new ErrorHandler("Product Not Found", 404));
+
+};
+
+
+  const  product = [];
+products.forEach((rating)=>{ 
+     
+        if(rating.ratings >=4){
+             product.push(rating);
+        }
+       
+    })
+
+  
+res.status(200).json({
+    success:true,
+    product,
+});
+});
+
+
+
+// //  Top Deals of month -
+
+// exports.getMonthlyTopDeals = catchAsyncError (async( req, res, next)=>{
+     
+     
+//     const products = await  Product.find()
+    
+//     if(!product){
+//         return next(new ErrorHandler("Product Not Found", 404));
+    
+//     };
+    
+    
+//      let product = [];
+//     products.forEach((rating)=>{ 
+          
+         
+//             if(rating.ratings >=4){
+//                  product.push(rating);
+             
+//             }
+
+//         })
+    
+      
+//     res.status(200).json({
+//         success:true,
+//         product,
+//     });
+//     });
+    
+    
