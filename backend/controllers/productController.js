@@ -273,11 +273,11 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
      
 const products = await  Product.find()
 
+
 if(!products){
     return next(new ErrorHandler("Product Not Found", 404));
 
 };
-
 
   const  product = [];
 products.forEach((rating)=>{ 
