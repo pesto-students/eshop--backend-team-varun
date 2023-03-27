@@ -22,7 +22,7 @@ const crypto = require("crypto");
         type:String,
         required:[true,"Please Enter Your password"],
         minLenght:[8 , "Password should be greater than 8 characters"],
-        select: true
+        select: false
     },
     avatar:{
         public_Id:{
