@@ -264,3 +264,79 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
         success:true,
      });
 });
+
+
+//  Top Deals -- 
+
+ exports.getTopDeals = catchAsyncError (async( req, res, next)=>{
+     
+    const resultPerPage = 15;
+    const productCount= await Product.countDocuments();
+     
+
+
+    const apiFeature = new ApiFeatures(Product.find(),req.query).pagination(resultPerPage);
+    const products =await apiFeature.query;
+
+    if(!products){
+    return next(new ErrorHandler("Product Not Found", 404));
+
+    };
+
+    const  product = [];
+    products.forEach((rating)=>{ 
+     
+        if(rating.ratings >=4){
+             product.push(rating);
+        }
+       
+    })
+
+  
+    res.status(200).json({
+    success:true,
+    product,
+    productCount,
+});
+});
+
+
+
+
+
+
+ 
+
+
+// //  Top Deals of month -
+
+// exports.getMonthlyTopDeals = catchAsyncError (async( req, res, next)=>{
+     
+     
+//     const products = await  Product.find()
+    
+//     if(!product){
+//         return next(new ErrorHandler("Product Not Found", 404));
+    
+//     };
+    
+    
+//      let product = [];
+//     products.forEach((rating)=>{ 
+          
+         
+//             if(rating.ratings >=4){
+//                  product.push(rating);
+             
+//             }
+
+//         })
+    
+      
+//     res.status(200).json({
+//         success:true,
+//         product,
+//     });
+//     });
+    
+    
