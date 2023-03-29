@@ -301,6 +301,41 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
 });
 
 
+// Suffled Products
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+exports.shuffleProducts = catchAsyncError( async( req, res, next)=>{
+     const products = await Product.find();
+     const productCount= await Product.countDocuments();
+
+     
+      const  product =[]
+
+      Object.keys(  products).forEach((key)=>{ 
+                   
+             product.push(products[key]);
+        
+       
+    })
+    shuffle(product);
+
+       
+     res.status(200).json({
+        success: true,
+        product,
+        productCount,
+     })
+})
+
+
+  
+
 
 
 
@@ -308,35 +343,3 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
  
 
 
-// //  Top Deals of month -
-
-// exports.getMonthlyTopDeals = catchAsyncError (async( req, res, next)=>{
-     
-     
-//     const products = await  Product.find()
-    
-//     if(!product){
-//         return next(new ErrorHandler("Product Not Found", 404));
-    
-//     };
-    
-    
-//      let product = [];
-//     products.forEach((rating)=>{ 
-          
-         
-//             if(rating.ratings >=4){
-//                  product.push(rating);
-             
-//             }
-
-//         })
-    
-      
-//     res.status(200).json({
-//         success:true,
-//         product,
-//     });
-//     });
-    
-    
