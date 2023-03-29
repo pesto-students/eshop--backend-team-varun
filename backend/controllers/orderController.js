@@ -42,7 +42,7 @@ exports.newOrder = catchAsyncError(async(req, res, next)=>{
    exports.getSingleOrder = catchAsyncError( async (req, res, next)=>{
       const order = await Order.findById(req.params.id).populate(
       "user",
-      "name email"
+      "name  email"
       );
 
       if(!order){
@@ -71,6 +71,7 @@ exports.newOrder = catchAsyncError(async(req, res, next)=>{
 
    exports.getAllOrders = catchAsyncError ( async (req, res, next)=>{
       const orders = await Order.find();
+     
 
       let totalAmount =0;
        orders.forEach((order)=>{
