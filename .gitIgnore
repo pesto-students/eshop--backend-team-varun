@@ -1,2 +1,8 @@
-backend/config/config.env
-node_modules
+
+# dependencies
+/node_modules
+
+# misc
+./config/config.env
+
+
