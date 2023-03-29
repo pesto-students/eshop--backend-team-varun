@@ -6,7 +6,8 @@
     getProductDetail,
     createProductReview,
     getProductReviews,
-    deleteReviews}= require("../controllers/productController");
+    deleteReviews,
+    getTopDeals}= require("../controllers/productController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 
