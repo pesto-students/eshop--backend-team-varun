@@ -303,26 +303,25 @@ exports.deleteReviews = catchAsyncError( async(req, res, next)=>{
 
 // Suffled Products
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+function shuffle(pro) {
+    for (let i = pro.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      [pro[i], pro[j]] = [pro[j], pro[i]];
     }
   }
 
-exports.shuffleProducts = catchAsyncError( async( req, res, next)=>{
+exports.getShuffleProducts = catchAsyncError( async( req, res, next)=>{
      const products = await Product.find();
      const productCount= await Product.countDocuments();
 
-     
-      const  product =[]
+        const  product =[];
 
       Object.keys(  products).forEach((key)=>{ 
                    
              product.push(products[key]);
         
        
-    })
+    });
     shuffle(product);
 
        
@@ -330,12 +329,48 @@ exports.shuffleProducts = catchAsyncError( async( req, res, next)=>{
         success: true,
         product,
         productCount,
-     })
-})
+     });
+});
 
 
   
+// Top Deals of Month
+exports.getTopMonthDeals = catchAsyncError (async( req, res, next)=>{
+     
+    const resultPerPage = 15;
+    const productCount= await Product.countDocuments();
+  
+   const apiFeature = new ApiFeatures(Product.find(),req.query).pagination(resultPerPage);
+    const products =await apiFeature.query;
 
+    if(!products){
+    return next(new ErrorHandler("Product Not Found", 404));
+
+    };
+    
+    const product = [];
+    products.forEach((pro)=>{ 
+        const now = new Date();
+         const month = now.getMonth()+1;
+         const year = now.getFullYear();
+         
+      
+        if( (pro.ratings >= 4 )&& (pro.createdAt.getMonth()+1)===(month)
+        && (pro.createdAt.getFullYear())===(year) ){
+            product.push(pro);
+       }
+        
+          
+       
+    });
+
+  
+    res.status(200).json({
+    success:true,
+    product,
+    productCount,
+});
+});
 
 
 

@@ -8,8 +8,8 @@
     getProductReviews,
     deleteReviews,
     getTopDeals,
-    suffledProducts,
-    shuffleProducts}= require("../controllers/productController");
+    getShuffleProducts,
+    getTopMonthDeals}= require("../controllers/productController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 
@@ -35,7 +35,9 @@ const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
     router.route("/reviews").get(getProductReviews).delete(isAuthenticatedUser, deleteReviews);
 
     router.route("/topdeals").get(getTopDeals);
-    router.route("/shuffleproducts").get(shuffleProducts);
+    router.route("/shuffleproducts").get(getShuffleProducts);
+    router.route("/monthlytopdeals").get(getTopMonthDeals);
+
 
     
 
