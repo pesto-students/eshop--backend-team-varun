@@ -7,21 +7,21 @@ const { newOrder,
     deleteOrder } = require("../controllers/orderController");
 const router = express.Router();
 
-const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
+const { verifyToken, authorizeRoles } = require("../middleware/auth");
 
 
-router.route("/order/new").post(isAuthenticatedUser, newOrder);
+router.route("/order/new").post(verifyToken, newOrder);
 
 router.route("/order/:id")
-.get(isAuthenticatedUser, authorizeRoles("admin"), getSingleOrder);
+.get(verifyToken, authorizeRoles("admin"), getSingleOrder);
 
-router.route("/orders/me").get(isAuthenticatedUser, myOrders );
+router.route("/orders/me").get(verifyToken, myOrders );
 
-router.route("/admin/orders").get(isAuthenticatedUser, authorizeRoles("admin"), getAllOrders);
+router.route("/admin/orders").get(verifyToken, authorizeRoles("admin"), getAllOrders);
 
 router.route("/admin/order/:id")
-.put(isAuthenticatedUser, authorizeRoles("admin"), updateOrder)
-.delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOrder);
+.put(verifyToken, authorizeRoles("admin"), updateOrder)
+.delete(verifyToken, authorizeRoles("admin"), deleteOrder);
 
 
 
