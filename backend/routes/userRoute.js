@@ -10,7 +10,8 @@ const { registerUser,
     getAllUser,
     getSingleUser,
     updateUserRole,
-    deleteUser} = require("../controllers/userController");
+    deleteUser,
+    mailToAdmin} = require("../controllers/userController");
 
     const {isAuthenticatedUser, authorizeRoles}= require("../middleware/auth");
 
@@ -36,6 +37,8 @@ router.route("/admin/users").get(isAuthenticatedUser, authorizeRoles("admin"), g
 router.route("/admin/user/:id").get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
 .put(isAuthenticatedUser, authorizeRoles("admin"),updateUserRole)
 .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
+
+router.route("/mailtoadmin").post(isAuthenticatedUser,mailToAdmin);
 
 
 

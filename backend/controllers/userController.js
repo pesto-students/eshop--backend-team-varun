@@ -5,13 +5,14 @@ const User  = require("../models/userModel");
  const sendEmail= require("../utils/sendEmail")
  const crypto = require("crypto");
  const cloudinary = require("cloudinary");
+const receiveEmail = require("../utils/receiveEmail");
 
 //Reister a User
 
 exports. registerUser = catchAsyncError(async (req, res, next)=>{
 
    const myCloud = await  cloudinary.v2.uploader.upload(req.body.avatar, {
-      floder: "Avtars",
+      floder: "Avatars",
       width: 150,
       crop: "scale",
    }) 
@@ -97,7 +98,17 @@ exports.forgetPassword =  catchAsyncError( async( req, res, next)=>{
 
  
 
-      const message = `Your password reset token is :-\n\n ${resetPasswordUrl} \n\n if you have not requeseted this email then, please ignore it `;
+      const message = `\n 
+      Eshop  Online Shopping Platfrom
+          
+      Password Reset Link is :- ${resetPasswordUrl} \n
+
+      If you didn't request this link, you can safely ignore this email. Someone else might have typed your email address by mistake
+      \n
+      Thanks\n 
+      The Eshop team`;
+
+
 
 
       try{
@@ -267,4 +278,27 @@ exports.deleteUser = catchAsyncError(async(req, res, next)=>{
       success:true,
       message: "User Deleted Successfully"
     });
+});
+
+// Contact Admin
+exports.mailToAdmin = catchAsyncError(async(req, res, next)=>{
+   
+   await receiveEmail(  {
+      email : req.body.email,
+      subject: req.body.subject,
+      message: req.body.message
+   }, (error, info)=>{
+      if(error){
+          console.log(error);
+          res.send(error);
+      }else{
+         console.log("Email sent :" + info.response);
+         res.send("success");
+      }
+     });
+
+   res.status(200).json({
+      success:true,
+   });
+
 });
