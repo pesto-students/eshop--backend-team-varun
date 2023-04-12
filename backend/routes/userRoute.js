@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { registerUser, 
     loginUser, 
     logout, 
@@ -14,6 +15,7 @@ const { registerUser,
     mailToAdmin} = require("../controllers/userController");
 
     const {verifyToken, authorizeRoles}= require("../middleware/auth");
+
 
 const router = express.Router();
 
@@ -32,16 +34,17 @@ router.route("/me/update").put(verifyToken, updateProfile);
 
 router.route("password/update").put(verifyToken, updatePassword);
 
-router.route("/admin/users").get(verifyToken, authorizeRoles("admin"), getAllUser);
+router
+  .route("/admin/users")
+  .get(verifyToken, authorizeRoles("admin"), getAllUser);
 
-router.route("/admin/user/:id").get(verifyToken, authorizeRoles("admin"), getSingleUser)
-.put(verifyToken, authorizeRoles("admin"),updateUserRole)
-.delete(verifyToken, authorizeRoles("admin"), deleteUser);
+router
+  .route("/admin/user/:id")
+  .get(verifyToken, authorizeRoles("admin"), getSingleUser)
+  .put(verifyToken, authorizeRoles("admin"), updateUserRole)
+  .delete(verifyToken, authorizeRoles("admin"), deleteUser);
 
 router.route("/mailtoadmin").post(isAuthenticatedUser,mailToAdmin);
 
-
-
-
-
 module.exports = router;  
+
