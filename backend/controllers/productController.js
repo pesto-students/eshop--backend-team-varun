@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/featuresApi");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary"). v2;
 
 //create Product -- Admin access only
 exports.createProduct = catchAsyncError(async (req, res, next) => {
@@ -231,6 +231,7 @@ exports.getShuffleProducts = catchAsyncError(async (req, res, next) => {
     product.push(products[key]);
   });
   shuffle(product);
+
 
   res.status(200).json({
     success: true,

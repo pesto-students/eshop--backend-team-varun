@@ -34,10 +34,10 @@ cloudinary.config({
 });
 
 // Unhandled Promise Rejections Errors
-
 process.on("unhandledRejection", (err) => {
   console.log(` Error : ${err.message}`);
   console.log(`Shutting down the server due to unhandled promise Resjections`);
+
 
   server.close(() => {
     process.exit(1);

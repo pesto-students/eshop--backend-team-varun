@@ -1,20 +1,21 @@
 const express = require("express");
-const {
-  registerUser,
-  loginUser,
-  logout,
-  forgetPassword,
-  resetPassword,
-  getUserDetails,
-  updatePassword,
-  updateProfile,
-  getAllUser,
-  getSingleUser,
-  updateUserRole,
-  deleteUser,
-} = require("../controllers/userController");
 
-const { verifyToken, authorizeRoles } = require("../middleware/auth");
+const { registerUser, 
+    loginUser, 
+    logout, 
+    forgetPassword, 
+    resetPassword, 
+    getUserDetails, 
+    updatePassword,
+    updateProfile,
+    getAllUser,
+    getSingleUser,
+    updateUserRole,
+    deleteUser,
+    mailToAdmin} = require("../controllers/userController");
+
+    const {verifyToken, authorizeRoles}= require("../middleware/auth");
+
 
 const router = express.Router();
 
@@ -43,4 +44,7 @@ router
   .put(verifyToken, authorizeRoles("admin"), updateUserRole)
   .delete(verifyToken, authorizeRoles("admin"), deleteUser);
 
-module.exports = router;
+router.route("/mailtoadmin").post(isAuthenticatedUser,mailToAdmin);
+
+module.exports = router;  
+
