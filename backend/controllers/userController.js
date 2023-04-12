@@ -1,4 +1,4 @@
-const ErrorHandler = require("../utils/errorHandler");
+const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const User = require("../models/userModel");
 const sendToken = require("../utils/jwtTokens");
@@ -9,9 +9,12 @@ const cloudinary = require("cloudinary");
 //Reister a User
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { firstname, lastname, phoneNo, email, password } = req.body;
+
   const user = await User.create({
-    name,
+    firstname,
+    lastname,
+    phoneNo,
     email,
     password,
   });
@@ -23,8 +26,6 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
 
 exports.loginUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
-
-  // Checking User has given  Email and Pasword both
 
   if (!email || !password) {
     return next(new ErrorHandler("Please Enter Email and Password", 400));
@@ -67,14 +68,13 @@ exports.forgetPassword = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(`User Not Found`, 404));
   }
 
-  // Get ResetPassword Token
-
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/password/reset/${resetToken}`;
+  // const resetPasswordUrl = `${req.protocol}://${req.get(
+  //   "host"
+  // )}/api/v1/password/reset/${resetToken}`;
+  const resetPasswordUrl = `http://localhost:3000/password/reset/${resetToken}`;
 
   const message = `Your password reset token is :-\n\n ${resetPasswordUrl} \n\n if you have not requeseted this email then, please ignore it `;
 
@@ -98,7 +98,6 @@ exports.forgetPassword = catchAsyncError(async (req, res, next) => {
 });
 
 // Reset Password
-
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
   // creating Hash
   const resetPasswordToken = crypto
@@ -120,14 +119,16 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
     );
   }
 
-  if (req.body.password !== req.body.confirmPassword) {
+  if (req.body.passwords.password !== req.body.passwords.confirmPassword) {
     return next(new ErrorHandler(`Password Doesn't  Match`, 400));
   }
 
-  (user.password = req.body.password),
-    (user.resetPasswordToken = undefined),
-    (user.resetPasswordExpire = undefined),
-    await user.save();
+  user.password = req.body.passwords.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
   sendToken(user, 200, res);
 });
 
@@ -166,7 +167,6 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   };
-  // will add cloudnary later
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
@@ -209,18 +209,15 @@ exports.getSingleUser = catchAsyncError(async (req, res, next) => {
 // Update  User   Role or Profile -- admin
 exports.updateUserRole = catchAsyncError(async (req, res, next) => {
   const newUserData = {
-    name: req.body.name,
-    email: req.body.email,
     role: req.body.role,
   };
-
-  // will add cloudnary later
 
   const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
   });
+
   res.status(200).json({
     success: true,
   });
