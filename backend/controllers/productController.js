@@ -2,7 +2,7 @@ const Product= require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError= require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/featuresApi");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary"). v2;
 
 
 
@@ -28,8 +28,8 @@ exports.createProduct=  catchAsyncError(   async(req , res, next)=>{
         });
 
         imagesLinks.push({
-            public_id : result.public_id,
-            url:   result.secure_url,
+            public_id :result.public_id,
+            url:result.secure_url,
         })
     };
 
@@ -351,8 +351,8 @@ exports.getTopMonthDeals = catchAsyncError (async( req, res, next)=>{
     const product = [];
     products.forEach((pro)=>{ 
         const now = new Date();
-         const month = now.getMonth()+1;
-         const year = now.getFullYear();
+        const month = now.getMonth()+1;
+        const year = now.getFullYear();
          
       
         if( (pro.ratings >= 4 )&& (pro.createdAt.getMonth()+1)===(month)

@@ -35,6 +35,15 @@ cloudinary.config({
 });
 
 
+
+// cloudinary.v2.config({
+//   cloud_name: 'ddzmylydf',
+//   api_key: '412832468428695',
+//   api_secret: 'naq4LrjGe-Vmd69eTPr-SREhRp0',
+//   secure: true,
+// });
+
+
  // Unhandled Promise Rejections Errors
 
 process.on("unhandledRejection",(err)=>{
