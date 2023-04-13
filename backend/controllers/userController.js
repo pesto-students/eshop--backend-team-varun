@@ -1,14 +1,12 @@
-
 const ErrorHandler = require("../utils/errorHandler");
 
-const catchAsyncError= require("../middleware/catchAsyncError");
-const User  = require("../models/userModel");
- const sendToken = require("../utils/jwtTokens");
- const sendEmail= require("../utils/sendEmail")
- const crypto = require("crypto");
- const cloudinary = require("cloudinary");
+const catchAsyncError = require("../middleware/catchAsyncError");
+const User = require("../models/userModel");
+const sendToken = require("../utils/jwtTokens");
+const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto");
+const cloudinary = require("cloudinary");
 const receiveEmail = require("../utils/receiveEmail");
-
 
 //Reister a User
 
@@ -22,7 +20,6 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
     email,
     password,
   });
-
 
   sendToken(user, 201, res);
 });
@@ -81,12 +78,9 @@ exports.forgetPassword = catchAsyncError(async (req, res, next) => {
   // )}/api/v1/password/reset/${resetToken}`;
   const resetPasswordUrl = `http://localhost:3000/password/reset/${resetToken}`;
 
-  const message = `Your password reset token is :-\n\n ${resetPasswordUrl} \n\n if you have not requeseted this email then, please ignore it `;
+  // const message = `Your password reset token is :-\n\n ${resetPasswordUrl} \n\n if you have not requeseted this email then, please ignore it `;
 
-
- 
-
-      const message = `\n 
+  const message = `\n 
       Eshop  Online Shopping Platfrom
           
       Password Reset Link is :- ${resetPasswordUrl} \n
@@ -96,27 +90,20 @@ exports.forgetPassword = catchAsyncError(async (req, res, next) => {
       Thanks\n 
       The Eshop team`;
 
-
-
-
-      try{
-         await sendEmail({
-             email: user.email,
-             subject:`Eshop  Password Recovery`,
-             message,
-         });
-         res.status(200).json({
-            success:true,
-            message:`Email sent to ${user.email} Successfully`,
-         })
-
-      }
-      catch(error){
-         user.getResetPasswordToken = undefined;
-         user.getResetPasswordExpire = undefined;
-         await user.save({validateBeforeSave:false});
-
-        
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: `Eshop  Password Recovery`,
+      message,
+    });
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} Successfully`,
+    });
+  } catch (error) {
+    user.getResetPasswordToken = undefined;
+    user.getResetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
 
     return next(new ErrorHandler(error.message, 500));
   }
@@ -168,7 +155,6 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
 });
 
 // Update User Password
-
 exports.updatePassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
@@ -204,7 +190,6 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 // get All users
-
 exports.getAllUser = catchAsyncError(async (req, res, next) => {
   const users = await User.find();
 
@@ -215,7 +200,6 @@ exports.getAllUser = catchAsyncError(async (req, res, next) => {
 });
 
 // get Single User Details (Admin)
-
 exports.getSingleUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
@@ -248,33 +232,30 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
-
 // Contact Admin
-exports.mailToAdmin = catchAsyncError(async(req, res, next)=>{
-   
-   await receiveEmail(  {
-      email : req.body.email,
+exports.mailToAdmin = catchAsyncError(async (req, res, next) => {
+  await receiveEmail(
+    {
+      email: req.body.email,
       subject: req.body.subject,
-      message: req.body.message
-   }, (error, info)=>{
-      if(error){
-          console.log(error);
-          res.send(error);
-      }else{
-         console.log("Email sent :" + info.response);
-         res.send("success");
+      message: req.body.message,
+    },
+    (error, info) => {
+      if (error) {
+        res.send(error);
+      } else {
+        console.log("Email sent :" + info.response);
+        res.send("success");
       }
-     });
+    }
+  );
 
-   res.status(200).json({
-      success:true,
-   });
-
+  res.status(200).json({
+    success: true,
+  });
 });
 
 // Delete User -- Admin
-
 exports.deleteUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
