@@ -124,8 +124,6 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   });
   product.rating = avg / product.reviews.length;
 
-  console.log(product);
-
   await product.save({ validateBeforeSave: false });
 
   res.status(200).json({
