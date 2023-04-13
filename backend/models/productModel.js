@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: false,
   },
-  images: [ 
+  images: [
     {
       public_id: {
         type: String,

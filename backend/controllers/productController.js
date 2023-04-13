@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/featuresApi");
-const cloudinary = require("cloudinary"). v2;
+const cloudinary = require("cloudinary").v2;
 
 //create Product -- Admin access only
 exports.createProduct = catchAsyncError(async (req, res, next) => {
@@ -18,7 +18,7 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
 //Get All Product
 
 exports.getAllProducts = catchAsyncError(async (req, res) => {
-  const resultPerPage = 5;
+  const resultPerPage = 12;
   const productCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
@@ -93,7 +93,7 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
 //Create New  Review or update  the review
 
 exports.createProductReview = catchAsyncError(async (req, res, next) => {
-  const { rating, comment, productId } = req.body;
+  const { rating, name, comment, productId } = req.body;
 
   const review = {
     user: req.user._id,
@@ -110,7 +110,7 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   if (isReviewed) {
     product.reviews.forEach((rev) => {
       if (rev.user.toString() === req.user._id.toString())
-        (rev.rating = rating), (rev.comment = comment);
+        (rev.rating = rating), (rev.comment = comment), (rev.name = name);
     });
   } else {
     product.reviews.push(review);
@@ -123,6 +123,8 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
     avg += rev.rating;
   });
   product.rating = avg / product.reviews.length;
+
+  console.log(product);
 
   await product.save({ validateBeforeSave: false });
 
@@ -231,7 +233,6 @@ exports.getShuffleProducts = catchAsyncError(async (req, res, next) => {
     product.push(products[key]);
   });
   shuffle(product);
-
 
   res.status(200).json({
     success: true,
