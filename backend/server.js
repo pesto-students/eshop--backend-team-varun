@@ -2,6 +2,7 @@ const app = require("./app");
 
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
+const PORT = process.env.PORT || 4000;
 
 const connectDatabase = require("./config/database");
 
@@ -21,7 +22,7 @@ dotenv.config({ path: "backend/config/config.env" });
 //connecting  to DataBase
 connectDatabase();
 
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Sever is working   on http: //localhost ${process.env.PORT} `);
 });
 
@@ -37,7 +38,6 @@ cloudinary.config({
 process.on("unhandledRejection", (err) => {
   console.log(` Error : ${err.message}`);
   console.log(`Shutting down the server due to unhandled promise Resjections`);
-
 
   server.close(() => {
     process.exit(1);
