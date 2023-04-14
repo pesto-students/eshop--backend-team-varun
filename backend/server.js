@@ -2,7 +2,6 @@ const app = require("./app");
 
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
-const PORT = process.env.PORT || 4000;
 
 const connectDatabase = require("./config/database");
 
@@ -22,6 +21,7 @@ dotenv.config({ path: "backend/config/config.env" });
 //connecting  to DataBase
 connectDatabase();
 
+const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => {
   console.log(`Sever is working   on http: //localhost ${process.env.PORT} `);
 });
