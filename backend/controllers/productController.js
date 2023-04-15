@@ -95,9 +95,11 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
 exports.createProductReview = catchAsyncError(async (req, res, next) => {
   const { rating, name, comment, productId } = req.body;
 
+  console.log("req.body", req.body);
+
   const review = {
     user: req.user._id,
-    name: req.user.name,
+    name: name,
     rating: Number(rating),
     comment,
   };
@@ -113,7 +115,7 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
         (rev.rating = rating), (rev.comment = comment), (rev.name = name);
     });
   } else {
-    product.reviews.push(review); 
+    product.reviews.push(review);
     product.numOfReviews = product.reviews.length;
   }
 
@@ -125,9 +127,11 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   product.rating = avg / product.reviews.length;
 
   await product.save({ validateBeforeSave: false });
+  console.log("product => ", product);
 
   res.status(200).json({
     success: true,
+    product,
   });
 });
 
